@@ -91,13 +91,16 @@ jobs:
           path: dist/*.tar.gz
 
   build-wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }} (${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
     needs: [test]
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        # Only build on Linux since io_uring is Linux-only
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-latest-arm64
+            arch: aarch64
 
     steps:
       - uses: actions/checkout@v4
@@ -111,7 +114,7 @@ jobs:
         uses: pypa/cibuildwheel@v3.3.0
         env:
           CIBW_PLATFORM: linux
-          CIBW_ARCHS_LINUX: x86_64 aarch64
+          CIBW_ARCHS_LINUX: ${{ matrix.arch }}
           CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-*"
           CIBW_SKIP: "*-musllinux_*"  # Skip musl for now
           CIBW_BEFORE_ALL_LINUX: |
@@ -129,5 +132,5 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-${{ matrix.os }}
+          name: wheels-${{ matrix.os }}-${{ matrix.arch }}
           path: ./wheelhouse/*.whl
