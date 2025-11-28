@@ -1,0 +1,34 @@
+# Docker Compose for development and testing
+services:
+  # Development environment
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: bash -c "pip install -e . && bash"
+    stdin_open: true
+    tty: true
+    # io_uring requires elevated privileges
+    privileged: true
+
+  # Run tests
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: pytest -v tests/
+    # io_uring requires elevated privileges
+    privileged: true
+
+  # Build wheel
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./dist:/app/dist
+    working_dir: /app
+    command: python -m build

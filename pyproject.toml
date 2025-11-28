@@ -1,0 +1,58 @@
+[project]
+name = "aio-uring"
+version = "0.1.0"
+description = "High-performance async file I/O using Linux io_uring"
+readme = "README.md"
+authors = [
+    { name = "Alex", email = "aiexz@yandex.ru" }
+]
+requires-python = ">=3.10"
+dependencies = []
+license = { text = "MIT" }
+keywords = ["io_uring", "async", "file-io", "linux", "asyncio"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Cython",
+    "Topic :: System :: Filesystems",
+    "Framework :: AsyncIO",
+]
+
+[project.urls]
+Homepage = "https://github.com/aiexz/aio-uring"
+Repository = "https://github.com/aiexz/aio-uring"
+Issues = "https://github.com/aiexz/aio-uring/issues"
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel", "Cython>=3.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["aio_uring", "aio_uring.core"]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"aio_uring.core" = ["*.pyx", "*.pxd"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+    "pytest-asyncio>=1.3.0",
+    "setuptools>=68.0",
+    "wheel>=0.45.1",
+    "Cython>=3.0",
+    "build>=1.0",
+    "twine>=5.0",
+]

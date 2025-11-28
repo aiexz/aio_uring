@@ -1,0 +1,41 @@
+services:
+  read_bench:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    # 1. Run from the ramdisk directory
+    working_dir: /ramdisk
+    # 2. Point to the script's original location using absolute path
+    command: python /app/benchmarks/read.py
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: 1.0
+    volumes:
+      # 3. Create the RAM disk at this location
+      - type: tmpfs
+        target: /ramdisk
+        tmpfs:
+          size: 512M
+          mode: 1777
+
+  write_bench:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    working_dir: /ramdisk
+    command: python /app/benchmarks/write.py
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: 1.0
+    volumes:
+      - type: tmpfs
+        target: /ramdisk
+        tmpfs:
+          size: 512M
+          mode: 1777
