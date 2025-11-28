@@ -75,6 +75,9 @@ async def main():
 asyncio.run(main())
 ```
 
+## Inspired by
+- [aiouring](https://github.com/GhostSignal/aiouring)
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
